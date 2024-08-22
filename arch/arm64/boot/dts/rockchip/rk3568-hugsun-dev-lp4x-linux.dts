@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2020 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+#include "rk3568-hugsun-dev-lp4x.dtsi"
+#include "rk3568-linux.dtsi"
+
+/ {
+	model = "Hugsun RK3568 DEV LP4X V10 Board";
+	compatible = "rockchip,rk3568-hugsun-lp4x-v10", "rockchip,rk3568";
+};
+

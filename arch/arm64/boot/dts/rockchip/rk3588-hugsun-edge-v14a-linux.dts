@@ -1,0 +1,334 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#include "rk3588-hugsun-edge-v14.dtsi"
+#include "rk3588-linux.dtsi"
+//#include "rk3588-hugsun-edge-v14a-lt6911uxc-dual-mipi.dtsi"
+/ {
+	model = "RK3588 EDGE LP4x V1.4 BlueBerry Board";
+	compatible = "rockchip,rk3588-hugsun-edge-v14-linux", "rockchip,rk3588";
+};
+
+&rk_headset {
+		status = "disabled";
+		compatible = "rockchip_headset";
+		headset_gpio = <&gpio3 RK_PB2 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&hp_det>;
+		io-channels = <&saradc 3>;
+};
+
+&i2c3 {
+	status = "okay";
+	es8388: es8388@10 {
+		status = "okay";
+		#sound-dai-cells = <0>;
+		compatible = "everest,es8388", "everest,es8323";
+		reg = <0x10>;
+		clocks = <&mclkout_i2s0>;
+		clock-names = "mclk";
+		assigned-clocks = <&mclkout_i2s0>;
+		amp-en-gpio = <&gpio3 RK_PB2 GPIO_ACTIVE_HIGH>;
+		assigned-clock-rates = <12288000>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&i2s0_mclk>;
+	};
+};
+
+
+
+&pwm3 {
+	compatible = "rockchip,remotectl-pwm";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pwm3m0_pins>;
+	remote_pwm_id = <3>;
+	handle_cpu_id = <1>;
+	remote_support_psci = <0>;
+	status = "okay";
+
+	ir_key1 {  //hugsun blue remote
+		rockchip,usercode = <0x7f80>;
+		rockchip,key_table =
+			<0xec	KEY_REPLY>,
+			<0xd8	KEY_BACK>,
+			<0xc7	KEY_UP>,
+			<0xbf	KEY_DOWN>,
+			<0xc8	KEY_LEFT>,
+			<0xc6	KEY_RIGHT>,
+			<0x8c	KEY_HOME>,
+			<0x78	KEY_VOLUMEUP>,
+			<0x76	KEY_VOLUMEDOWN>,
+			<0x7e	KEY_POWER>,
+			<0xed	KEY_POWER>,  //20171123 
+			<0x7c	KEY_MENU>,
+			<0xb7	388>;
+	};
+
+	ir_key2 {   //hugsun 
+		rockchip,usercode = <0xef10>;
+		rockchip,key_table =
+			<0xa2 KEY_POWER>,
+			<0xe8 KEY_VOLUMEUP>,
+			<0xec KEY_VOLUMEDOWN>,
+			<0xa6 141>,//KEY_SETUP>,
+			<0xa5 388>,
+			<0xff KEY_BACK>,
+			<0xba KEY_UP>,
+			<0xf8 KEY_LEFT>,
+			<0xbe KEY_REPLY>,
+			<0xfe KEY_RIGHT>,
+			<0xaa KEY_DOWN>,
+			<0xb9 KEY_HOME>,
+			<0xfa KEY_MENU>,
+			<0xe5 KEY_REWIND>, 
+			<0xa7 KEY_PLAYPAUSE>,
+			<0xe2 KEY_FASTFORWARD>,
+			<0xa0 77>,  //@
+			<0xb0 KEY_0>,
+			<0xa1 14>,
+			<0xaf KEY_1>,
+			<0xad KEY_2>,
+			<0xef KEY_3>,
+			<0xb3 KEY_4>,
+			<0xb5 KEY_5>,
+			<0xee KEY_6>,
+			<0xf0 KEY_7>,
+			<0xb1 KEY_8>,
+			<0xf2	KEY_9>;
+	};
+
+	ir_key3 {
+		rockchip,usercode = <0xdf00>;
+		rockchip,key_table =
+			<0xe3 KEY_POWER>,
+			<0xb4 63>,	//youtube
+			<0xfe 67>,	//Media Center
+			<0xa2 KEY_VOLUMEUP>,
+			<0xb0 66>,	//Netflix
+			<0xa0 68>,	//SetupWizard
+			<0xa3 KEY_VOLUMEDOWN>,
+			
+			<0xbd KEY_HOME>,
+			<0xf5 KEY_BACK>,
+			
+			<0xe5 KEY_UP>,    
+			<0xb8 KEY_LEFT>,  
+			<0xf9 KEY_REPLY>, 
+			<0xf8 KEY_RIGHT>, 
+			<0xb7 KEY_DOWN>,  
+			<0xfc 388>,
+			<0xe7 KEY_MENU>,
+			
+			<0xab KEY_1>, 
+			<0xe9 KEY_2>, 
+			<0xea KEY_3>, 
+			<0xaf KEY_4>, 
+			<0xed KEY_5>, 
+			<0xee KEY_6>, 
+			<0xb3 KEY_7>, 
+			<0xf1 KEY_8>, 
+			<0xf2 KEY_9>,
+			<0xbe 227>,  //Fn
+			<0xf3 KEY_0>,
+			<0xef 14>;
+
+	};
+
+	ir_key4{
+		rockchip,usercode = <0x4040>;
+		rockchip,key_table =
+		<0x4d KEY_POWER>;     //power (for 2.4g)
+	};
+};
+
+&rkcif_mipi_lvds2_sditf {
+	status = "disabled";
+};
+
+&rkisp0 {
+	status = "disabled";
+};
+
+&isp0_mmu {
+	status = "disabled";
+};
+
+&rkisp0_vir1 {
+	status = "disabled";
+};
+
+
+&csi2_dphy0_hw {
+	status = "okay";
+};
+
+&csi2_dphy1_hw {
+	status = "okay";
+};
+
+&csi2_dphy0 {
+	status = "okay";
+
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			hdmi_mipi_in: endpoint@1 {
+				reg = <1>;
+				remote-endpoint = <&lt6911uxc_out0>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+		port@1 {
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			csidphy0_out: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&mipi2_csi2_input>;
+			};
+		};
+	};
+};
+
+
+&i2c7 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c7m2_xfer>;
+	status = "okay";
+
+	lt6911:lt6911@2b {
+		compatible = "lontium,lt6911uxc";
+		status = "okay";
+		reg = <0x2b>;
+		clocks = <&ext_cam_clk>;
+		clock-names = "xvclk";
+		power-domains = <&power RK3588_PD_VI>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&lt6911uxc_pin>;
+		interrupt-parent = <&gpio3>;
+		interrupts = <RK_PD1 IRQ_TYPE_LEVEL_HIGH>;
+		reset-gpios = <&gpio4 RK_PA6 GPIO_ACTIVE_LOW>;
+		plugin-det-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
+		rockchip,camera-module-index = <0>;
+		rockchip,camera-module-facing = "back";
+		rockchip,camera-module-name = "HDMI-MIPI2";
+		rockchip,camera-module-lens-name = "LT6911UXC";
+
+		multi-dev-info {
+			dev-idx-l = <4>;
+			dev-idx-r = <2>;
+			combine-idx = <2>;
+			pixel-offset = <0>;
+			dev-num = <2>;
+		};
+
+		port {
+			lt6911uxc_out0: endpoint {
+				remote-endpoint = <&hdmi_mipi_in>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+	};
+};
+
+&mipi_dcphy0 {
+	status = "okay";
+};
+
+&mipi_dcphy1 {
+	status = "okay";
+};
+
+&mipi0_csi2_hw {
+	status = "okay";
+};
+
+&mipi1_csi2_hw {
+	status = "okay";
+};
+
+&mipi2_csi2_hw {
+	status = "okay";
+};
+
+&mipi3_csi2_hw {
+	status = "okay";
+};
+
+&mipi4_csi2_hw {
+	status = "okay";
+};
+
+&mipi5_csi2_hw {
+	status = "okay";
+};
+
+&mipi2_csi2 {
+	status = "okay";
+
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			mipi2_csi2_input: endpoint@1 {
+				reg = <1>;
+				remote-endpoint = <&csidphy0_out>;
+			};
+		};
+
+		port@1 {
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			mipi2_csi2_output: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&cif_mipi_in2>;
+			};
+		};
+	};
+};
+
+&rkcif_mipi_lvds2 {
+	status = "okay";
+
+	port {
+		cif_mipi_in2: endpoint {
+			remote-endpoint = <&mipi2_csi2_output>;
+		};
+	};
+};
+
+&rkcif {
+	status = "okay";
+};
+
+&rkcif_mmu {
+	status = "okay";
+};
+
+&rkcif_mipi_lvds2_sditf {
+	status = "okay";
+
+	port {
+		mipi_lvds2_sditf: endpoint {
+			remote-endpoint = <&isp0_vir0>;
+		};
+	};
+};

@@ -1,0 +1,4 @@
+config RTL8821CE
+	tristate "Realtek 8821C PCI WiFi"
+	depends on PCI
+

@@ -1,0 +1,22 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+#include "rk3528-hugsun-x88pro-ddr4-v10.dtsi"
+#include "rk3528-linux.dtsi"
+
+&gpu{
+    interrupt-names = "gp", "gpmmu", "pp", 
+					  "pp0", "ppmmu0", "pp1", "ppmmu1";
+    clock-names = "bus", "core";
+	//clocks = <&cru ACLK_GPU>, <&cru ACLK_GPU>;
+    //clocks = <&scmi_clk SCMI_CLK_GPU>, <&cru ACLK_GPU_MALI>, <&cru PCLK_GPU_ROOT>;
+    clocks = <&cru ACLK_GPU_MALI>, <&cru ACLK_GPU_MALI>;
+    assigned-clocks = <&cru ACLK_GPU_MALI>;
+	assigned-clock-rates = <800000000>;
+
+};
+//clocks = <&scmi_clk SCMI_CLK_GPU>, <&cru ACLK_GPU_MALI>, <&cru PCLK_GPU_ROOT>;
+//clock-names = "clk_mali", "aclk_gpu_mali", "pclk_gpu";

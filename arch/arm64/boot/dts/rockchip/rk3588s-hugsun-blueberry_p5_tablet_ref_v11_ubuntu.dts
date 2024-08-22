@@ -1,0 +1,37 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#include <dt-bindings/display/media-bus-format.h>
+#include "rk3588s-hugsun-blueberry.dtsi"
+#include "rk3588s-hugsun-blueberry-v10-mipi.dtsi"
+#include "rk3588s-hugsun-blueberry-v10-camera.dtsi"
+/ {
+	model = "Rockchip RK3588S Blueberry V10 Board";
+	compatible = "rockchip,rk3588s-Blueberry-v10", "rockchip,rk3588";
+};
+
+&chosen {
+	bootargs = "earlycon=uart8250,mmio32,0xfeb50000 console=ttyFIQ0 irqchip.gicv3_pseudo_nmi=0 root=/dev/mmcblk0p5 rw rootwait";
+};
+
+
+&pcie2x1l2{
+	reset-gpios = <&gpio3 RK_PD1 GPIO_ACTIVE_HIGH>;
+	rockchip,skip-scan-in-resume;
+	status = "okay";
+};
+
+&combphy0_ps{
+	status = "okay";
+};
+
+&uart9 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&uart9m2_xfer &uart9m2_ctsn>;
+ 	status = "okay";
+ };
