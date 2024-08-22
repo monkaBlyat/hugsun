@@ -1,0 +1,178 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#include "rk3528.dtsi"
+#include "rk3528-hugsun.dtsi"
+
+/ {
+	model = "Rockchip RK3528 X88PRO DDR4 V10 Board";
+	compatible = "rockchip,rk3528-hugsun-x88pro-ddr4-v10", "rockchip,rk3528";
+	
+	/omit-if-no-ref/
+	vcc_sd: vcc-sd {
+		compatible = "regulator-fixed";
+		regulator-boot-on;
+		gpio = <&gpio4 RK_PA1 GPIO_ACTIVE_LOW>;
+		regulator-name = "vcc_sd";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		vin-supply = <&vcc_3v3_s3>;
+	};
+
+	/omit-if-no-ref/
+	vccio_sd: vccio-sd {
+		compatible = "regulator-gpio";
+		regulator-name = "vccio_sd";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <3300000>;
+		gpios = <&gpio4 RK_PB6 GPIO_ACTIVE_HIGH>;
+		vin-supply = <&vcc5v0_sys>;
+		states = <1800000 0x0
+			  3300000 0x1>;
+	};	
+
+	sdio_pwrseq: sdio-pwrseq {
+		compatible = "mmc-pwrseq-simple";
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_enable_h  &clkm1_32k_out>;
+		//reset-gpios = <&gpio1 RK_PA6 GPIO_ACTIVE_LOW>;
+	};
+
+	wireless_bluetooth: wireless-bluetooth {
+		compatible = "bluetooth-platdata";
+		//wifi-bt-power-toggle;
+		uart_rts_gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_LOW>;
+		pinctrl-names = "default", "rts_gpio";
+		pinctrl-0 = <&uart2m1_rtsn>;
+		pinctrl-1 = <&uart2m1_gpios>;
+		BT,reset_gpio    = <&gpio1 RK_PC1 GPIO_ACTIVE_HIGH>;
+		BT,wake_host_irq = <&gpio1 RK_PC2 GPIO_ACTIVE_HIGH>;
+		status = "okay";
+	};
+
+	wireless_wlan: wireless-wlan {
+		compatible = "wlan-platdata";
+		rockchip,grf = <&grf>;
+		wifi_chip_type = "";
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_host_wake_irq >;
+		WIFI,host_wake_irq = <&gpio1 RK_PA7 GPIO_ACTIVE_HIGH>;
+		WIFI,reset_gpio = <&gpio1 RK_PA6  GPIO_ACTIVE_HIGH>;
+		status = "okay";
+	};
+	
+	skykirin_led {
+		compatible = "skykirin-ht1628";
+		spi_cs = <&gpio4 RK_PA5 GPIO_ACTIVE_HIGH>;  //GPIO_C2
+		spi_clk = <&gpio4 RK_PA4 GPIO_ACTIVE_HIGH>; //GPIO_C3
+		spi_data = <&gpio4 RK_PA6 GPIO_ACTIVE_HIGH>; //GPIO_C6
+		
+		status = "okay";
+	};
+
+	leds: gpio-leds {
+		compatible = "gpio-leds";
+		ir {
+			gpios = <&gpio4 RK_PB7 GPIO_ACTIVE_HIGH>;
+			linux,default-trigger = "none";
+			default-state = "off";
+		};
+		pwr-green {
+			gpios = <&gpio4 RK_PC1 GPIO_ACTIVE_HIGH>;
+			linux,default-trigger = "none";
+			default-state = "off";
+			retain-state-suspended;
+			retain-state-shutdown;
+		};
+	};	
+};
+
+&sdio0 {
+	max-frequency = <500000000>;
+	no-sd;
+	no-mmc;
+	supports-sdio;
+	bus-width = <4>;
+	disable-wp;
+	cap-sd-highspeed;
+	cap-sdio-irq;
+	keep-power-in-suspend;
+	non-removable;
+	mmc-pwrseq = <&sdio_pwrseq>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&sdio0_bus4 &sdio0_cmd &sdio0_clk>;
+	sd-uhs-sdr104;
+	status = "okay";
+};
+
+&sdmmc {
+	bus-width = <4>;
+	cap-mmc-highspeed;
+	cap-sd-highspeed;
+	disable-wp;
+	max-frequency = <150000000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&sdmmc_clk &sdmmc_cmd &sdmmc_det &sdmmc_bus4>;
+	rockchip,default-sample-phase = <90>;
+	supports-sd;
+	sd-uhs-sdr12;
+	sd-uhs-sdr25;
+	sd-uhs-sdr50;
+	sd-uhs-sdr104;
+	vqmmc-supply = <&vccio_sd>;
+	vmmc-supply = <&vcc_sd>;
+	status = "okay";
+};
+
+&uart2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2m1_xfer &uart2m1_ctsn>;
+};
+
+&i2c1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c1m0_xfer>;
+	i2c-scl-rising-time-ns = <100>;
+	i2c-scl-falling-time-ns = <30>;
+
+	hym8563: hym8563@51  {
+		compatible = "haoyu,hym8563"; //"rtc,hym8563";
+		reg = <0x51>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&rtc_irq>;
+		irq_gpio = <&gpio4 RK_PB2 IRQ_TYPE_EDGE_FALLING>;
+		status = "okay";
+	};
+};
+
+&pinctrl {
+	wireless-wlan {
+		wifi_host_wake_irq: wifi-host-wake-irq {
+			rockchip,pins = <1 RK_PA7 RK_FUNC_GPIO &pcfg_pull_down>;
+		};
+
+		wifi_enable_h: wifi-enable-h {
+			rockchip,pins = <1 RK_PA6 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+
+	wireless-bluetooth {
+		uart2m1_gpios: uart2m1-gpios {
+			rockchip,pins = <1 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+
+	hym8563-irq {
+		rtc_irq: rtc-irq {
+			rockchip,pins =
+				<4 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+};

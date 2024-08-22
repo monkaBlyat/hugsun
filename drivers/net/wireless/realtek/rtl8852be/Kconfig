@@ -1,0 +1,3 @@
+config RTL8852BE
+	tristate "Realtek 8852B PCI WiFi"
+	depends on PCI

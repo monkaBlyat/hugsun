@@ -1,0 +1,469 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#include "rk3588-hugsun-r58-3in.dtsi"
+#include "rk3588-linux.dtsi"
+
+/ {
+	model = "RK3588 r58-3in Board";
+	compatible = "rockchip,rk3588-r58-3in-linux", "rockchip,rk3588";
+
+	vcc3v3_lcd: vcc3v3-lcd {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc3v3_lcd";
+		vin-supply = <&vcc_3v3_s0>;
+	};
+
+	pcie20_avdd0v85: pcie30-avdd0v75 {
+		compatible = "regulator-fixed";
+		regulator-name = "pcie20_avdd0v85";
+		regulator-boot-on;
+		regulator-always-on;
+		regulator-min-microvolt = <850000>;
+		regulator-max-microvolt = <850000>;
+		vin-supply = <&vdd_0v85_s0>;
+	};
+
+	pcie20_avdd1v8: pcie30-avdd1v8 {
+		compatible = "regulator-fixed";
+		regulator-name = "pcie20_avdd1v8";
+		regulator-boot-on;
+		regulator-always-on;
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		vin-supply = <&avcc_1v8_s0>;
+	};
+
+      vcc3v3_pcie30: vcc3v3-pcie30 {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc3v3_pcie30";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		enable-active-high;
+		gpios = <&gpio4 RK_PA7 GPIO_ACTIVE_HIGH>;
+		startup-delay-us = <5000>;
+		vin-supply = <&vcc12v_dcin>;
+        };
+
+	panel-edp0 {
+		compatible = "simple-panel";
+		backlight = <&backlight_edp>;
+		power-supply = <&vcc3v3_lcd>;
+		enable-gpios = <&gpio3 RK_PC5 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&edp0_rst_gpio>;
+		prepare-delay-ms = <120>;
+		enable-delay-ms = <1000>;
+		init-delay-ms = <50>;
+		reset-delay-ms = <20>;
+		unprepare-delay-ms = <120>;
+		disable-delay-ms = <120>;
+
+		panel-timing {
+			clock-frequency = <594000000>;
+            hactive = <3840>;
+            vactive = <2160>;
+            hback-porch = <296>;
+            hfront-porch = <176>;
+            vback-porch = <72>;
+            vfront-porch = <8>;
+            hsync-len = <88>;
+            vsync-len = <10>;
+            hsync-active = <0>;
+            vsync-active = <0>;
+            de-active = <0>;
+            pixelclk-active = <0>;
+		};
+
+		port {
+			panel_in_edp0: endpoint {
+				remote-endpoint = <&edp0_out_panel>;
+			};
+		};
+	};
+
+	gpio_keys: gpio-keys {
+		compatible = "gpio-keys";
+		pinctrl-names = "default";
+		pinctrl-0 = <&gpiokey>;
+
+		gpio_key1 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PD0 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 1";
+			linux,code = <BTN_Z>;
+			wakeup-source;
+		};
+		gpio_key2 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PD1 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 2";
+			linux,code = <BTN_TR>;
+			wakeup-source;
+		};
+		gpio_key3 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PD2 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 3";
+			linux,code = <BTN_TR2>;
+			wakeup-source;
+		};
+		gpio_key4 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PD3 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 4";
+			linux,code = <BTN_MODE>;
+			wakeup-source;
+		};
+		gpio_key5 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PD4 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 5";
+			linux,code = <BTN_SOUTH>;
+			wakeup-source;
+		};
+		gpio_key6 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PD5 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 6";
+			linux,code = <BTN_TL>;
+			wakeup-source;
+		};
+		gpio_key7 {
+			debounce-interval = <10>;
+			gpios = <&gpio0 RK_PD3 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 7";
+			linux,code = <ABS_HAT0X>;
+			wakeup-source;
+		};
+		gpio_key8 {
+			debounce-interval = <10>;
+			gpios = <&gpio3 RK_PA0 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 8";
+			linux,code = <ABS_HAT0Y>;
+			wakeup-source;
+		};
+		gpio_key9 {
+			debounce-interval = <10>;
+			gpios = <&gpio3 RK_PC7 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 9";
+			linux,code = <ABS_HAT0Y>;
+			wakeup-source;
+		};
+		gpio_key10 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PA0 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 10";
+			linux,code = <ABS_HAT0X>;
+			wakeup-source;
+		};
+		gpio_key11 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PB2 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 11";
+			linux,code = <BTN_THUMBR>;
+			wakeup-source;
+		};
+		gpio_key12 {
+			debounce-interval = <10>;
+			gpios = <&gpio3 RK_PD5 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 12";
+			linux,code = <BTN_THUMBL>;
+			wakeup-source;
+		};
+		gpio_key13 {
+			debounce-interval = <10>;
+			gpios = <&gpio3 RK_PC4 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 13";
+			linux,code = <KEY_ESC>;
+			wakeup-source;
+		};		
+	};	
+	
+	ps2@0 {
+	        compatible = "ps2-gpio";
+	        status = "okay";
+
+	        pinctrl-names = "default";
+	        pinctrl-0 = <&ps2_gpios>;
+
+	        data-gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>;
+	        clk-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
+	};	
+	
+};
+
+/*  8  inches lcd  start   */
+&dsi0 {
+	status = "disabled";
+	//rockchip,lane-rate = <1000>;
+	dsi0_panel: panel@0 {
+		status = "okay";
+		compatible = "simple-panel-dsi";
+		reg = <0>;
+		backlight = <&backlight_mipi>;
+		power-supply = <&vcc3v3_mipi_lcd_n>;
+		reset-gpios =  <&gpio3 RK_PA3 GPIO_ACTIVE_HIGH>; 
+		enable-gpios = <&gpio3 RK_PB0 GPIO_ACTIVE_HIGH>;
+		reset-delay-ms = <10>;
+		enable-delay-ms = <10>;
+		prepare-delay-ms = <10>;
+		unprepare-delay-ms = <10>;
+		disable-delay-ms = <60>;
+		dsi,flags = <(MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST |
+			MIPI_DSI_MODE_LPM | MIPI_DSI_MODE_EOT_PACKET)>;
+		dsi,format = <MIPI_DSI_FMT_RGB888>;
+		dsi,lanes  = <4>;
+		panel-init-sequence = [
+			05 80 01 11
+			05 28 01 29
+		];
+
+		panel-exit-sequence = [
+			05 00 01 28
+			05 00 01 10
+		];
+
+		display-timings {
+			native-mode = <&timing0>;
+			timing0: timing0 {
+				clock-frequency = <160000000>;  //159391260  159747840
+				hactive = <1200>;
+				vactive = <1920>; 
+				hback-porch = <60>;
+				hfront-porch = <80>;
+				hsync-len = <1>;
+				vback-porch = <25>;
+				vfront-porch = <35>;
+				vsync-len = <1>;
+				hsync-active = <1>;
+				vsync-active = <1>;
+				de-active = <0>;
+				pixelclk-active = <0>;
+				};
+		};
+
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			port@0 {
+				reg = <0>;
+				panel_in_dsi0: endpoint {
+					remote-endpoint = <&dsi0_out_panel>;
+				};
+			};
+		};
+	};
+
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		port@1 {
+			reg = <1>;
+			dsi0_out_panel: endpoint {
+				remote-endpoint = <&panel_in_dsi0>;
+			};
+		};
+	};
+
+};
+
+&mipi_dcphy0 {
+	status = "disabled";
+};
+
+&dsi0_in_vp2 {
+	status = "disabled";
+};
+
+&dsi0_in_vp3 {
+	status = "disabled";
+};
+
+&route_dsi0 {
+	status = "disabled";
+	logo,uboot = "logo.bmp";
+	logo,kernel = "logo_kernel.bmp";
+	connect = <&vp2_out_dsi0>;
+};
+
+/*  8  inches lcd   end    */
+
+&edp0 {
+	status = "disabled";
+	pinctrl-names = "default";
+	pinctrl-0 = <&edp0_hpd>;
+	hpd-gpios = <&gpio0 RK_PC4 GPIO_ACTIVE_HIGH>;
+	//reset_edp-gpios = <&gpio3 RK_PC5 GPIO_ACTIVE_HIGH>;
+	ports {
+		port@1 {
+			reg = <1>;
+
+			edp0_out_panel: endpoint {
+				remote-endpoint = <&panel_in_edp0>;
+			};
+		};
+	};
+};
+
+&edp0_in_vp0 {
+	status = "disabled";
+};
+
+&hdptxphy0 {
+	status = "okay";
+};
+
+&hdptxphy_hdmi0 {
+	status = "disabled";
+};
+
+
+/*
+ * mipi_dcphy1 needs to be enabled
+ * when dsi1 is enabled
+ */
+&dsi1 {
+	status = "okay";
+};
+
+&dsi1_in_vp2 {
+	status = "disabled";
+};
+
+&dsi1_in_vp3 {
+	status = "okay";
+};
+
+&mipi_dcphy1 {
+	status = "okay";
+};
+
+&route_edp0 {
+	connect = <&vp0_out_edp0>;
+	logo,uboot = "logo.bmp";
+	logo,kernel = "logo_kernel.bmp";
+	status = "disabled";
+};
+
+&route_dsi1 {
+	status = "okay";
+	logo,uboot = "logo.bmp";
+	logo,kernel = "logo_kernel.bmp";
+	connect = <&vp3_out_dsi1>;
+};
+
+&pcie2x1l0 {
+	reset-gpios = <&gpio4 RK_PB0 GPIO_ACTIVE_HIGH>;
+	pinctrl-names = "default";
+	vpcie3v3-supply = <&vcc3v3_pcie30>;
+	pinctrl-0 = <&rtl8111_isolate>;
+	status = "okay";
+};
+
+&combphy0_ps {
+	status = "okay";
+};
+
+&combphy1_ps {
+	status = "okay";
+};
+
+&combphy2_psu {
+	status = "okay";
+};
+
+&pinctrl {
+	buttons {
+		gpiokey: gpiokey {
+			rockchip,pins = 
+				<4 RK_PD0 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PD1 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PD2 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PD3 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PD4 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PD5 RK_FUNC_GPIO &pcfg_pull_up>,
+				<0 RK_PD3 RK_FUNC_GPIO &pcfg_pull_up>,
+				<3 RK_PA0 RK_FUNC_GPIO &pcfg_pull_up>,
+				<3 RK_PC7 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PA0 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PB2 RK_FUNC_GPIO &pcfg_pull_up>,
+				<3 RK_PD5 RK_FUNC_GPIO &pcfg_pull_up>,
+				<3 RK_PC4 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+	};
+
+	rtl8111 {
+		rtl8111_isolate: rtl8111-isolate {
+			rockchip,pins = <3 RK_PB7 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+	};
+
+	edp {
+		edp0_hpd: edp0-hpd {
+			rockchip,pins = <0 RK_PC4 0 &pcfg_pull_none>;
+		};
+
+		edp0_rst_gpio: edp0-rst-gpio {
+			rockchip,pins = <3 RK_PC5 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+
+		edp1_rst_gpio: edp1-rst-gpio {
+			rockchip,pins = <3 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+	
+	ps2 {
+		ps2_gpios: ps2-gpios {
+			rockchip,pins = <1 RK_PA0 0 &pcfg_pull_none>,
+					<1 RK_PA1 0 &pcfg_pull_none>;
+		};
+	};	
+
+	fan_enable_gpio {
+		fan_enable_gpio: fan_enable_gpio{
+			rockchip,pins =
+				<4 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>; 
+		};
+	};
+};
+
+
+&leds{
+	green_led: green-led {
+		gpios = <&gpio0 RK_PD4 GPIO_ACTIVE_HIGH>;
+		default-state = "off";
+	};
+	blue_led: blue-led {
+		gpios = <&gpio0 RK_PD5 GPIO_ACTIVE_HIGH>;
+		default-state = "off";
+	};
+	led_en: led_en {
+		gpios = <&gpio2 RK_PC1 GPIO_ACTIVE_HIGH>;
+		default-state = "on";
+	};
+};
+
+&fan{
+	compatible = "pwm-fan";
+	#cooling-cells = <2>;
+	pwms = <&pwm5 0 50000 0>;
+	cooling-levels = <0 50 100 150 200 255>;
+	rockchip,temp-trips = <
+		50000	1
+		55000	2
+		60000	3
+		65000	4
+		70000	5
+	>;
+	enable-gpios = <&gpio4 RK_PC6 GPIO_ACTIVE_HIGH>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&fan_enable_gpio>;
+};

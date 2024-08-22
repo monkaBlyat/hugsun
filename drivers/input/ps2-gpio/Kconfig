@@ -1,0 +1,9 @@
+menu "ps2 gpio input driver for pull pod & gsensor"
+
+config PS2_GPIO_SENSOR
+	tristate "ps2 gpio sensor input"
+	default y	
+	help 
+	    Enable sensor driver of ps2 gpio.
+
+endmenu

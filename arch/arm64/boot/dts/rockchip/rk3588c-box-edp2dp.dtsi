@@ -1,0 +1,69 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/ {
+	dp-con {
+		compatible = "dp-connector";
+		status = "okay";
+
+		port {
+			dp_con_in_edp1: endpoint {
+				remote-endpoint = <&edp1_out_dp_con>;
+			};
+		};
+	};
+
+	edp1-sound {
+		compatible = "simple-audio-card";
+		simple-audio-card,name = "rockchip-edp-sound";
+
+		simple-audio-card,cpu {
+			sound-dai = <&spdif_tx4>;
+		};
+
+		simple-audio-card,codec {
+			sound-dai = <&edp1 1>;
+		};
+	};
+};
+
+&edp1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&hdmim0_tx1_hpd>;
+	#sound-dai-cells = <1>;
+	status = "okay";
+
+	ports {
+		port@1 {
+			reg = <1>;
+
+			edp1_out_dp_con: endpoint {
+				remote-endpoint = <&dp_con_in_edp1>;
+			};
+		};
+	};
+};
+
+&edp1_in_vp1 {
+	status = "okay";
+};
+
+&hdptxphy1 {
+	status = "okay";
+};
+
+&hdptxphy_hdmi1 {
+	status = "disabled";
+};
+
+&hdmi1 {
+	status = "disabled";
+};
+
+&spdif_tx4 {
+	status = "okay";
+};
+ 

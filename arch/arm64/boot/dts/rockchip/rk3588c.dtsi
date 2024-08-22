@@ -1,0 +1,404 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
+ */
+
+#include "rk3588.dtsi"
+
+/ {
+	aliases {
+		/delete-property/ csi2dphy3;
+		/delete-property/ csi2dphy4;
+		/delete-property/ csi2dphy5;
+		/delete-property/ dp1;
+		/delete-property/ edp0;
+		/delete-property/ hdptx1;
+		/delete-property/ rkcif_mipi_lvds4;
+		/delete-property/ rkcif_mipi_lvds5;
+		/delete-property/ usbdp1;
+	};
+
+	/delete-node/ cluster0-opp-table;
+	/delete-node/ cluster1-opp-table;
+	/delete-node/ cluster2-opp-table;
+	/delete-node/ gpu-opp-table;
+	/delete-node/ npu-opp-table;
+
+	cluster0_opp_table: cluster0-opp-table {
+		compatible = "operating-points-v2";
+		opp-shared;
+
+		nvmem-cells = <&cpul_leakage>;
+		nvmem-cell-names = "leakage";
+		rockchip,opp-shared-dsu;
+
+		rockchip,pvtpll-avg-offset = <0x64>;
+		rockchip,pvtpll-min-rate = <1200000>;
+		rockchip,pvtpll-volt-step = <12500>;
+		rockchip,grf = <&litcore_grf>;
+
+		opp-408000000 {
+			opp-hz = /bits/ 64 <408000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+			opp-suspend;
+		};
+		opp-600000000 {
+			opp-hz = /bits/ 64 <600000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-816000000 {
+			opp-hz = /bits/ 64 <816000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1008000000 {
+			opp-hz = /bits/ 64 <1008000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1200000000 {
+			opp-hz = /bits/ 64 <1200000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1416000000 {
+			opp-hz = /bits/ 64 <1416000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1608000000 {
+			opp-hz = /bits/ 64 <1608000000>;
+			opp-microvolt = <775000 775000 950000>,
+					<775000 775000 950000>;
+			clock-latency-ns = <40000>;
+		};
+	};
+
+	cluster1_opp_table: cluster1-opp-table {
+		compatible = "operating-points-v2";
+		opp-shared;
+
+		nvmem-cells = <&cpub0_leakage>;
+		nvmem-cell-names = "leakage";
+
+		rockchip,pvtpll-avg-offset = <0x18>;
+		rockchip,pvtpll-min-rate = <1200000>;
+		rockchip,pvtpll-volt-step = <12500>;
+		rockchip,grf = <&bigcore0_grf>;
+		volt-mem-read-margin = <
+			675000	3
+			495000	4
+		>;
+		low-volt-mem-read-margin = <4>;
+		intermediate-threshold-freq = <1008000>;
+
+		opp-408000000 {
+			opp-hz = /bits/ 64 <408000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+			opp-suspend;
+		};
+		opp-600000000 {
+			opp-hz = /bits/ 64 <600000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-816000000 {
+			opp-hz = /bits/ 64 <816000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1008000000 {
+			opp-hz = /bits/ 64 <1008000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1200000000 {
+			opp-hz = /bits/ 64 <1200000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1416000000 {
+			opp-hz = /bits/ 64 <1416000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1608000000 {
+			opp-hz = /bits/ 64 <1608000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1800000000 {
+			opp-hz = /bits/ 64 <1800000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1896000000 {
+			opp-hz = /bits/ 64 <1896000000>;
+			opp-microvolt = <800000 800000 950000>,
+					<800000 800000 950000>;
+			clock-latency-ns = <40000>;
+		};
+	};
+
+	cluster2_opp_table: cluster2-opp-table {
+		compatible = "operating-points-v2";
+		opp-shared;
+
+		nvmem-cells = <&cpub1_leakage>;
+		nvmem-cell-names = "leakage";
+
+		rockchip,pvtpll-avg-offset = <0x18>;
+		rockchip,pvtpll-min-rate = <1200000>;
+		rockchip,pvtpll-volt-step = <12500>;
+		rockchip,grf = <&bigcore1_grf>;
+		volt-mem-read-margin = <
+			675000	3
+			495000	4
+		>;
+		low-volt-mem-read-margin = <4>;
+		intermediate-threshold-freq = <1008000>;
+
+		opp-408000000 {
+			opp-hz = /bits/ 64 <408000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+			opp-suspend;
+		};
+		opp-600000000 {
+			opp-hz = /bits/ 64 <600000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-816000000 {
+			opp-hz = /bits/ 64 <816000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1008000000 {
+			opp-hz = /bits/ 64 <1008000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1200000000 {
+			opp-hz = /bits/ 64 <1200000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1416000000 {
+			opp-hz = /bits/ 64 <1416000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1608000000 {
+			opp-hz = /bits/ 64 <1608000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1800000000 {
+			opp-hz = /bits/ 64 <1800000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+			clock-latency-ns = <40000>;
+		};
+		opp-1896000000 {
+			opp-hz = /bits/ 64 <1896000000>;
+			opp-microvolt = <800000 800000 950000>,
+					<800000 800000 950000>;
+			clock-latency-ns = <40000>;
+		};
+	};
+
+	gpu_opp_table: gpu-opp-table {
+		compatible = "operating-points-v2";
+
+		nvmem-cells = <&gpu_leakage>;
+		nvmem-cell-names = "leakage";
+
+		clocks = <&cru CLK_GPU>;
+		clock-names = "clk";
+		rockchip,pvtpll-avg-offset = <0x1c>;
+		rockchip,pvtpll-min-rate = <800000>;
+		rockchip,pvtpll-volt-step = <12500>;
+		rockchip,grf = <&gpu_grf>;
+		volt-mem-read-margin = <
+			855000	1
+			765000	2
+			675000	3
+			495000	4
+		>;
+		low-volt-mem-read-margin = <4>;
+		intermediate-threshold-freq = <400000>;
+
+		opp-300000000 {
+			opp-hz = /bits/ 64 <300000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+		};
+		opp-400000000 {
+			opp-hz = /bits/ 64 <400000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+		};
+		opp-500000000 {
+			opp-hz = /bits/ 64 <500000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+		};
+		opp-600000000 {
+			opp-hz = /bits/ 64 <600000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+		};
+		opp-700000000 {
+			opp-hz = /bits/ 64 <700000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+		};
+		opp-800000000 {
+			opp-hz = /bits/ 64 <800000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+		};
+		opp-900000000 {
+			opp-hz = /bits/ 64 <900000000>;
+			opp-microvolt = <750000 750000 850000>,
+					<750000 750000 850000>;
+		};
+	};
+
+	npu_opp_table: npu-opp-table {
+		compatible = "operating-points-v2";
+
+		nvmem-cells = <&npu_leakage>;
+		nvmem-cell-names = "leakage";
+
+		clocks = <&cru PCLK_NPU_GRF>;
+		clock-names = "pclk";
+		rockchip,pvtpll-avg-offset = <0x50>;
+		rockchip,pvtpll-min-rate = <800000>;
+		rockchip,pvtpll-volt-step = <12500>;
+		rockchip,grf = <&npu_grf>;
+		volt-mem-read-margin = <
+			855000	1
+			765000	2
+			675000	3
+			495000	4
+		>;
+		low-volt-mem-read-margin = <4>;
+		intermediate-threshold-freq = <500000>;
+
+		opp-300000000 {
+			opp-hz = /bits/ 64 <300000000>;
+			opp-microvolt = <750000 750000 850000>,
+					<750000 750000 850000>;
+		};
+		opp-400000000 {
+			opp-hz = /bits/ 64 <400000000>;
+			opp-microvolt = <750000 750000 850000>,
+					<750000 750000 850000>;
+		};
+		opp-500000000 {
+			opp-hz = /bits/ 64 <500000000>;
+			opp-microvolt = <750000 750000 850000>,
+					<750000 750000 850000>;
+		};
+		opp-600000000 {
+			opp-hz = /bits/ 64 <600000000>;
+			opp-microvolt = <750000 750000 850000>,
+					<750000 750000 850000>;
+		};
+		opp-700000000 {
+			opp-hz = /bits/ 64 <700000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+		};
+		opp-800000000 {
+			opp-hz = /bits/ 64 <800000000>;
+			opp-microvolt = <750000 750000 950000>,
+					<750000 750000 950000>;
+		};
+		opp-900000000 {
+			opp-hz = /bits/ 64 <900000000>;
+			opp-microvolt = <750000 750000 850000>,
+					<750000 750000 850000>;
+		};
+	};
+};
+
+/delete-node/ &csi2_dphy3;
+/delete-node/ &csi2_dphy4;
+/delete-node/ &csi2_dphy5;
+/delete-node/ &rkcif_mipi_lvds4;
+/delete-node/ &rkcif_mipi_lvds4_sditf;
+/delete-node/ &rkcif_mipi_lvds4_sditf_vir1;
+/delete-node/ &rkcif_mipi_lvds4_sditf_vir2;
+/delete-node/ &rkcif_mipi_lvds4_sditf_vir3;
+/delete-node/ &rkcif_mipi_lvds5;
+/delete-node/ &rkcif_mipi_lvds5_sditf;
+/delete-node/ &rkcif_mipi_lvds5_sditf_vir1;
+/delete-node/ &rkcif_mipi_lvds5_sditf_vir2;
+/delete-node/ &rkcif_mipi_lvds5_sditf_vir3;
+/delete-node/ &dp1;
+// /delete-node/ &hdmirx_ctrler;
+/delete-node/ &pcie3x2;
+/delete-node/ &usbdp_phy1;
+// /delete-node/ &csi2_dphy1_hw;
+/delete-node/ &route_dp1;
+/delete-node/ &vp0_out_dp1;
+/delete-node/ &vp1_out_dp1;
+/delete-node/ &vp2_out_dp1;
+
+&pcie30phy {
+	rockchip,pcie30-phymode = <PHY_MODE_PCIE_NANBNB>;
+};
+
+&pcie3x4 {
+	num-lanes = <2>;
+};
+
+&usbdrd_dwc3_1 {
+	maximum-speed = "high-speed";
+	phys = <&u2phy1_otg>;
+	phy-names = "usb2-phy";
+	snps,dis_u2_susphy_quirk;
+};
+
+/delete-node/ &clk32k_out1;
+/delete-node/ &fspim1_pins;
+/delete-node/ &fspim1_cs1;
+/delete-node/ &gmac0_ppstring;
+/delete-node/ &gmac0_ptp_refclk;
+/delete-node/ &hdmim0_tx1_scl;
+/delete-node/ &hdmim0_tx1_sda;
+/delete-node/ &i2c0m1_xfer;
+/delete-node/ &i2c4m1_xfer;
+/delete-node/ &spi3m0_pins;
+/delete-node/ &spi3m0_cs0;
+/delete-node/ &spi3m0_cs1;
+/delete-node/ &uart7m0_xfer;
+/delete-node/ &uart7m0_ctsn;
+/delete-node/ &uart7m0_rtsn;

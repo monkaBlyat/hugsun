@@ -1,0 +1,324 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#include "rk3588-hugsun-dmc.dtsi"
+#include "rk3588-linux.dtsi"
+
+/ {
+	model = "RK3588 ALP LP4x V1.0 GameBox Board";
+	compatible = "rockchip,rk3588-dmc-alp-linux", "rockchip,rk3588";
+
+
+	vcc3v3_lcd: vcc3v3-lcd {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc3v3_lcd";
+		vin-supply = <&vcc_3v3_s0>;
+	};
+
+	panel-edp0 {
+		compatible = "simple-panel";
+		power-supply = <&vcc3v3_lcd>;
+		//reset-gpios = <&gpio3 RK_PC5 GPIO_ACTIVE_LOW>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&edp0_rst_gpio>;
+		prepare-delay-ms = <120>;
+		enable-delay-ms = <120>;
+		unprepare-delay-ms = <120>;
+		disable-delay-ms = <120>;
+		
+		port {
+			panel_in_edp0: endpoint {
+				remote-endpoint = <&edp0_out_panel>;
+			};
+		};
+	};
+
+	panel-edp1 {
+		compatible = "simple-panel";
+		backlight = <&backlight2>;
+		power-supply = <&vcc3v3_lcd>;
+		reset-gpios = <&gpio3 RK_PC6 GPIO_ACTIVE_LOW>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&edp1_rst_gpio>;
+		prepare-delay-ms = <120>;
+		enable-delay-ms = <120>;
+		unprepare-delay-ms = <120>;
+		disable-delay-ms = <120>;
+		width-mm = <129>;
+		height-mm = <171>;
+
+		panel-timing {
+			clock-frequency = <149600000>;
+			hactive = <1920>;
+			vactive = <1080>;
+			hfront-porch = <160>;
+			hsync-len = <32>;
+			hback-porch = <72>;
+			vfront-porch = <52>;
+			vsync-len = <4>;
+			vback-porch = <4>;
+			hsync-active = <0>;
+			vsync-active = <0>;
+			de-active = <0>;
+			pixelclk-active = <0>;
+		};
+
+		port {
+			panel_in_edp1: endpoint {
+				remote-endpoint = <&edp1_out_panel>;
+			};
+		};
+	};
+
+	gpio_keys: gpio-keys {
+		compatible = "gpio-keys";
+		pinctrl-names = "default";
+		pinctrl-0 = <&gpiokey>;
+
+		gpio_key1 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PD0 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 1";
+			linux,code = <BTN_Z>;
+			wakeup-source;
+		};
+		gpio_key2 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PD1 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 2";
+			linux,code = <BTN_TR>;
+			wakeup-source;
+		};
+		gpio_key3 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PD2 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 3";
+			linux,code = <BTN_TR2>;
+			wakeup-source;
+		};
+		gpio_key4 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PD3 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 4";
+			linux,code = <BTN_MODE>;
+			wakeup-source;
+		};
+		gpio_key5 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PD4 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 5";
+			linux,code = <BTN_SOUTH>;
+			wakeup-source;
+		};
+		gpio_key6 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PD5 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 6";
+			linux,code = <BTN_TL>;
+			wakeup-source;
+		};
+		gpio_key7 {
+			debounce-interval = <10>;
+			gpios = <&gpio3 RK_PB7 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 7";
+			linux,code = <ABS_HAT0X>;
+			wakeup-source;
+		};
+		gpio_key8 {
+			debounce-interval = <10>;
+			gpios = <&gpio3 RK_PC0 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 8";
+			linux,code = <ABS_HAT0Y>;
+			wakeup-source;
+		};
+		gpio_key9 {
+			debounce-interval = <10>;
+			gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 9";
+			linux,code = <ABS_HAT0Y>;
+			wakeup-source;
+		};
+		gpio_key10 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PA0 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 10";
+			linux,code = <ABS_HAT0X>;
+			wakeup-source;
+		};
+		gpio_key11 {
+			debounce-interval = <10>;
+			gpios = <&gpio4 RK_PB2 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 11";
+			linux,code = <BTN_THUMBR>;
+			wakeup-source;
+		};
+		gpio_key12 {
+			debounce-interval = <10>;
+			gpios = <&gpio3 RK_PD5 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 12";
+			linux,code = <BTN_THUMBL>;
+			wakeup-source;
+		};
+		gpio_key13 {
+			debounce-interval = <10>;
+			gpios = <&gpio3 RK_PC4 GPIO_ACTIVE_LOW>;
+			label = "GPIO Key 13";
+			linux,code = <KEY_ESC>;
+			wakeup-source;
+		};		
+	};	
+	
+	ps2@0 {
+	        compatible = "ps2-gpio";
+	        status = "okay";
+
+	        pinctrl-names = "default";
+	        pinctrl-0 = <&ps2_gpios>;
+
+	        data-gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>;
+	        clk-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
+	};	
+	
+};
+
+&edp0 {
+	status = "okay";
+	//force-hpd;
+	pinctrl-names = "default";
+	pinctrl-0 = <&edp0_hpd>;
+	hpd-gpios = <&gpio0 RK_PC4 GPIO_ACTIVE_HIGH>;
+
+	ports {
+		port@1 {
+			reg = <1>;
+
+			edp0_out_panel: endpoint {
+				remote-endpoint = <&panel_in_edp0>;
+			};
+		};
+	};
+};
+
+&edp0_in_vp2 {
+	status = "okay";
+};
+
+&hdptxphy0 {
+	status = "okay";
+};
+
+&hdptxphy_hdmi0 {
+	status = "disabled";
+};
+
+&edp1 {
+	force-hpd;
+	status = "okay";
+
+	ports {
+		port@1 {
+			reg = <1>;
+
+			edp1_out_panel: endpoint {
+				remote-endpoint = <&panel_in_edp1>;
+			};
+		};
+	};
+};
+
+&edp1_in_vp1 {
+	status = "okay";
+};
+
+&hdptxphy1 {
+	status = "okay";
+};
+
+&hdptxphy_hdmi1 {
+	status = "disabled";
+};
+
+/*
+ * mipi_dcphy1 needs to be enabled
+ * when dsi1 is enabled
+ */
+&dsi1 {
+	status = "okay";
+};
+
+&dsi1_in_vp2 {
+	status = "disabled";
+};
+
+&dsi1_in_vp3 {
+	status = "okay";
+};
+
+&mipi_dcphy1 {
+	status = "okay";
+};
+
+&route_edp0 {
+	connect = <&vp2_out_edp0>;
+	status = "okay";
+};
+
+&route_edp1 {
+	connect = <&vp1_out_edp1>;
+	status = "okay";
+};
+
+&route_dsi1 {
+	status = "okay";
+	connect = <&vp3_out_dsi1>;
+};
+
+&pinctrl {
+	buttons {
+		gpiokey: gpiokey {
+			rockchip,pins = 
+				<4 RK_PD0 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PD1 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PD2 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PD3 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PD4 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PD5 RK_FUNC_GPIO &pcfg_pull_up>,
+				<3 RK_PB7 RK_FUNC_GPIO &pcfg_pull_up>,
+				<3 RK_PC0 RK_FUNC_GPIO &pcfg_pull_up>,
+				<3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PA0 RK_FUNC_GPIO &pcfg_pull_up>,
+				<4 RK_PB2 RK_FUNC_GPIO &pcfg_pull_up>,
+				<3 RK_PD5 RK_FUNC_GPIO &pcfg_pull_up>,
+				<3 RK_PC4 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+	};
+
+	edp {
+		edp0_hpd: edp0-hpd {
+			rockchip,pins = <0 RK_PC4 0 &pcfg_pull_none>;
+		};
+
+		edp0_rst_gpio: edp0-rst-gpio {
+			rockchip,pins = <3 RK_PC5 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+
+		edp1_rst_gpio: edp1-rst-gpio {
+			rockchip,pins = <3 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+	
+	ps2 {
+		ps2_gpios: ps2-gpios {
+			rockchip,pins = <1 RK_PA0 0 &pcfg_pull_none>,
+					<1 RK_PA1 0 &pcfg_pull_none>;
+		};
+	};	
+
+};
+
+

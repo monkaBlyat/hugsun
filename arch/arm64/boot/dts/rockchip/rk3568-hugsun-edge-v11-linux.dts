@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2020 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+#include "rk3568-hugsun-edge-v11.dtsi"
+#include "rk3568-linux.dtsi"
+
+/ {
+	model = "RK3568 EDGE LP4x V1.1 BlueBerry Board";
+	compatible = "rockchip,rk3568-hugsun-edge-v11-linux", "rockchip,rk3568";
+};
+

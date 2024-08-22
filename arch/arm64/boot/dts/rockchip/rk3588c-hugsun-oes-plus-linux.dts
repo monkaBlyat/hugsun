@@ -1,0 +1,81 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#include "rk3588c-hugsun.dtsi"
+#include "rk3588c-linux.dtsi"
+#include "rk3588-cpu-swap.dtsi"
+
+
+/ {
+	model = "Rockchip RK3588C OES PLUS V10 Board";
+	compatible = "rockchip,rk3588c-hugsun-oes-plus-linux", "rockchip,rk3588";
+
+	vcc3v3_pcie30:vcc3v3-pcie30 {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc3v3_pcie30";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		enable-active-high;
+		gpio = <&gpio0 RK_PC5 GPIO_ACTIVE_HIGH>;
+		startup-delay-us = <7500>;
+		vin-supply = <&vcc12v_dcin>;
+	};
+
+};
+
+&i2s0_sound{
+	status = "disabled";
+};
+
+&es8311{
+	status = "disabled";
+};
+
+&hdmi0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&hdmim2_tx1_cec &hdmim1_tx0_hpd &hdmim2_tx0_scl &hdmim2_tx0_sda>;
+	//enable-gpios = <&gpio1 RK_PA4 GPIO_ACTIVE_HIGH>;
+	status = "okay";
+};
+
+&hdptxphy_hdmi0 {
+	status = "okay";
+};
+
+&route_hdmi0 {
+	status = "okay";
+	connect = <&vp0_out_hdmi0>;
+};
+
+&pcie30phy {
+	status = "okay";
+};
+
+&pcie3x4 {
+	reset-gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
+	vpcie3v3-supply = <&vcc3v3_pcie30>;
+	status = "okay";
+};
+
+
+&sata0 {
+	status = "okay";
+};
+
+&combphy0_ps {
+	status = "okay";
+};
+
+
+&sata1 {
+	status = "okay";
+};
+
+&combphy1_ps {
+	status = "okay";
+};
